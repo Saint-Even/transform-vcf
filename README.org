@@ -1,0 +1,13 @@
+transform-vcf
+A suite of tools for efficiently manipulating sets of vcf files
+
+
+* lineFilter
+* lineFinder
+* plate-impute
+* plates-merge
+* plates-miniMFI
+* ringStar
+* ringStarMerge
+* starCombine
+* starIntersect
