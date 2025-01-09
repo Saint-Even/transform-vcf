@@ -1,9 +1,7 @@
-transform-vcf
+* transform-vcf
 
 A suite of tools for efficiently manipulating sets of vcf files.
 Most of these scripts have parallel operation where bash reasonably allows.
-My apologies for the somewhat erratic program and file naming, this set of tools has evolved on an as needed basis.
-Standardization has (and will) continue to improve.
 
 * lineFilter
 
@@ -227,13 +225,55 @@ Function:
 Output:
 - A merged VCF file in the output directory, containing common markers across all input files
 
-* starCombine
+* starMerge
+
+Purpose: This script combines and compares VCF (Variant Call Format) files,
+focusing on common markers between a pivot file and other VCF files.
+
+Requirements:
+- Input directory with uncompressed VCF files
+- One VCF file named with .vcf.pivot extension
+- At least one other file with .vcf extension
+- Environment with parallel, rtgtools, and bcftools installed
+
+Usage:
+Place vcf files in the 'input' directory append '.pivot' to the chosen file and run the script.
+
+Function:
+1. Clears existing data and output directories
+2. Copies input files to the data directory
+3. Compresses and indexes VCF files
+4. Intersects markers and merges lines between the pivot file and other VCF files
+5. Processes and renames output files
+
+Output:
+- One output file for each input .vcf file, compared to the .vcf.pivot file
+- Output files contain common markers and all lines from both input files
+- Results are stored in the 'output' directory with the naming format:
+
 * starIntersect
 
+Purpose: This Bash script compares VCF (Variant Call Format) files against a
+pivot file to find common markers and unique lines.
 
-Provide a brief documentation for this program
-Purpose:
 Requirements:
+- Input directory with uncompressed VCF files
+- One VCF file named with .vcf.pivot extension
+- At least one other file with .vcf extension
+- Environment with parallel, rtgtools, and bcftools installed
+
 Usage:
+Place vcf files in the 'input' directory append '.pivot to the file of choice and run the script.
+
 Function:
+1. Clears and recreates data and output directories
+2. Copies input files to data directory
+3. Compresses and indexes VCF files
+4. Performs intersection of markers between the pivot file and other VCF files
+5. Moves and renames result files to the output directory
+
 Output:
+- One output file for each input .vcf file compared to the .vcf.pivot file
+- Output files contain:
+  - Common markers between the two files
+  - Lines unique to the non-pivot .vcf file

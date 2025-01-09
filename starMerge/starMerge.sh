@@ -1,15 +1,4 @@
 #!/bin/bash
-##           (\.---./)
-##            /.-.-.\
-##           /| 0_0 |\
-##          |_`-(v)-'_|
-##          \`-._._.-'/      .-.
-##    -~-(((.`-\_|_/-'.)))-~' <_
-##           `.     .'
-##             `._.'
-##
-##    -----~--~---~~~----~-`.-;~
-##            GEBVeR
 
 #requires an input dir with uncompressed vcf files
 #one vcf file must be named ending with .vcf.pivot
@@ -25,7 +14,7 @@ echo "The output will be one file for each file ending .vcf  compared to the pla
 echo "    COMMON markers"
 echo "    ALL lines"
 
-tag="STARCOM"
+tag="STARMERGE"
 :<<'COMMENT'
 COMMENT
 
@@ -100,3 +89,5 @@ done
 )
 
 echo "Complete"
+
+exit 0

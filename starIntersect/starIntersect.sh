@@ -1,15 +1,4 @@
 #!/bin/bash
-##           (\.---./)
-##            /.-.-.\
-##           /| 0_0 |\
-##          |_`-(v)-'_|
-##          \`-._._.-'/      .-.
-##    -~-(((.`-\_|_/-'.)))-~' <_
-##           `.     .'
-##             `._.'
-##
-##    -----~--~---~~~----~-`.-;~
-##            GEBVeR
 
 #requires an input dir with uncompressed vcf files
 #one vcf file must be named ending with .vcf.pivot
@@ -20,13 +9,11 @@
 #rtgtools
 #bcftools
 
-echo "Begin: Star"
 echo "The output will be one file for each file ending .vcf compared to the file ending .vcf.pivot"
 echo "    COMMON markers"
 echo "    ONLY .vcf lines"
 
-
-tag="STARINT"
+tag="STARINTERSECT"
 :<<'COMMENT'
 COMMENT
 
@@ -92,3 +79,5 @@ done
 )
 
 echo "Complete"
+
+exit 0
