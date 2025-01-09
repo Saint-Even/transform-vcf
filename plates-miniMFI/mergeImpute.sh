@@ -1,15 +1,4 @@
 #!/bin/bash
-##           (\.---./)
-##            /.-.-.\
-##           /| 0_0 |\
-##          |_`-(v)-'_|
-##          \`-._._.-'/      .-.
-##    -~-(((.`-\_|_/-'.)))-~' <_
-##           `.     .'
-##             `._.'
-##
-##    -----~--~---~~~----~-`.-;~
-##            GEBVeR
 
 #requires an input dir with uncompressed vcf files
 # designed to take the merged.vcf files from cassetteGBS output

@@ -1,19 +1,8 @@
 #!/bin/bash
-##           (\.---./)
-##            /.-.-.\
-##           /| 0_0 |\
-##          |_`-(v)-'_|
-##          \`-._._.-'/      .-.
-##    -~-(((.`-\_|_/-'.)))-~' <_
-##           `.     .'
-##             `._.'
-##
-##    -----~--~---~~~----~-`.-;~
-##            GEBVeR
 
 #requires an input dir with uncompressed vcf files
 
-#activae an environment with:
+#activate an environment with:
 #parallel
 #rtgtools
 #bcftools
@@ -138,3 +127,5 @@ bcftools merge \
 mv ${name} ../output
 )
 echo "Complete"
+
+exit 0

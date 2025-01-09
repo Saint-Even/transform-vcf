@@ -1,20 +1,8 @@
 #!/bin/bash
-##           (\.---./)
-##            /.-.-.\
-    ##           /| 0_0 |\
-    ##          |_`-(v)-'_|
-##          \`-._._.-'/      .-.
-##    -~-(((.`-\_|_/-'.)))-~' <_
-##           `.     .'
-##             `._.'
-##
-##    -----~--~---~~~----~-`.-;~
-##            GEBVeR
 
 #requires an input dir with uncompressed vcf files
 # merge plates to a large training data set
 # designed to take the filtered.vcf files from  post processing of cassetteGBS merged.vcf output
-#
 
 #activate an environment with:
 #parallel

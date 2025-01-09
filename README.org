@@ -1,13 +1,239 @@
 transform-vcf
-A suite of tools for efficiently manipulating sets of vcf files
 
+A suite of tools for efficiently manipulating sets of vcf files.
+Most of these scripts have parallel operation where bash reasonably allows.
+My apologies for the somewhat erratic program and file naming, this set of tools has evolved on an as needed basis.
+Standardization has (and will) continue to improve.
 
 * lineFilter
+
+Purpose:
+- Filters VCF files for repeat lines and removes empty lines
+- Removes specified custom drop lines
+- Handles duplicate sample names
+
+Requirements:
+- directory 'input' with uncompressed VCF files
+- Environment with rtgtools, bcftools, vcftools, and GNU parallel
+
+Usage:
+- Set the "customDrop" variable to specify additional lines to remove
+- Place input VCF files in the "input" directory
+- Run the script =./lineFilter.sh=
+
+Function:
+1. Clears and creates data and output directories
+2. Copies input VCF files to data directory
+3. Filters for repeat sample names:
+   - Identifies and removes duplicate samples (e.g., "1:SampleName")
+   - Removes empty/EMPTY samples
+   - Removes user-specified custom drop lines
+4. Processes VCF files using bcftools to retain only filtered samples
+5. Generates statistics using bcftools and rtg vcfstats
+6. Copies filtered VCF files and statistics to the output directory
+
+Output:
+- Filtered VCF files
+- BCFtools and RTG VCFstats statistics for each processed file
+
 * lineFinder
-* plate-impute
+
+Purpose: This script filters VCF files to keep only specific sample lines based
+on a user-defined pattern.
+The script processes multiple VCF files in parallel, retaining only the samples
+that match the specified pattern.
+
+Requirements:
+- directory 'input with uncompressed VCF files
+- Software: rtgtools, bcftools, vcftools, parallel
+
+Usage:
+1. Set the `keepKey` variable to define the pattern for lines to keep
+2. Place input VCF files in the "input" directory
+3. Run the script
+
+Function:
+1. Clears and creates "data" and "output" directories
+2. Copies input files to "data" directory
+3. Filters VCF files based on the `keepKey` pattern
+4. Processes filtered files using bcftools and rtg tools
+5. Generates statistics for the filtered files
+
+Output:
+- Filtered VCF files in the "output" directory
+- BCFtools and RTG statistics for each filtered file
+
 * plates-merge
+
+Purpose:
+This Bash script merges multiple VCF files into a single large dataset, primarily designed for post-processing filtered VCF files from cassetteGBS merged output.
+
+Requirements:
+- Input directory with uncompressed VCF files
+- Environment with: parallel, rtg-tools, bcftools, vcftools, and pandas
+
+Usage:
+Place VCF files in the 'input' directory and run the script.
+
+Function:
+1. Clears existing data and output directories
+2. Copies input files to the data directory
+3. Compresses and indexes VCF files
+4. Converts VCF files to BCF format
+5. Sorts BCF files
+6. Merges all sorted BCF files
+7. Renames variants using a Python script (renameSNP.py)
+8. Moves the final merged and renamed VCF file to the output directory
+
+Output:
+A single merged VCF file in the 'output' directory, named based on the input file names (e.g., "file1_file2_file3_combined.vcf")
+
 * plates-miniMFI
+
+mini merge filter impute pipeline
+
+Note:
+!!!The output of this pipeline gave a null result when run through star intersect, investigate before using!!!
+
+Purpose:
+This Bash script processes and merges multiple VCF (Variant Call Format) files from genotyping-by-sequencing (GBS) data, filters the merged data, and performs imputation.
+
+Requirements:
+- Bash environment
+- directory 'input' with uncompressed VCF files (merged.vcf files from cassetteGBS output)
+- The following tools installed and available in the environment:
+  - parallel
+  - rtgtools
+  - bcftools
+  - vcftools
+  - beagle
+  - Python (for renaming SNPs)
+
+Usage:
+Place the script in a directory with an "input" folder containing uncompressed VCF files. Run the script
+
+Function:
+1. Merges multiple VCF files into a single file
+2. Compresses and indexes the input files
+3. Converts files to BCF format and sorts them
+4. Merges the sorted BCF files
+5. Filters the merged variants based on various criteria
+6. Renames variants
+7. Performs imputation using Beagle
+
+Output:
+- A single imputed VCF file containing merged and processed data from all input files
+- The output file is named based on the input file names and stored in the "output" directory
+
+* plate-impute
+
+Purpose: This Bash script automates variant imputation using the Beagle
+software.
+
+Requirements:
+- Beagle (version > 5.0)
+- GNU Parallel
+- Input VCF files in an "input" directory
+
+Usage: Place VCF files in the "input" directory and run the script. It will
+process all VCF files found.
+
+Function:
+1. Sets up directory structure
+2. Copies input VCF files to a data directory
+3. Runs Beagle imputation on each VCF file in parallel
+   - ne=100000 (effective population size)
+   - err=0.001 (allele mismatch probability)
+   - window=100 (window length in cM)
+   - burnin=50 (max burnin iterations)
+   - iterations=40 (phasing iterations)
+4. Moves imputed results and log files to an output directory
+
+Output:
+- Imputed VCF files (uncompressed)
+- Log files from Beagle imputation
+
 * ringStar
+
+Purpose: This Bash script performs common marker intersection and exclusive line
+extraction from multiple VCF files.
+
+
+- Ring intersection:
+  - Performs a sequential intersection of VCF files to find common markers
+  - Uses bcftools isec to intersect each file with the result of the previous intersection
+- Star intersection:
+  - Takes the result from the ring intersection and intersects it with each original input file
+  - Creates separate files for common markers between the ring intersection result and each input file
+
+Requirements:
+- Input directory with uncompressed VCF files
+- Environment with parallel, rtgtools, and bcftools installed
+
+Usage:
+Place VCF files in the "input" directory and run the script. It will
+process all VCF files found.
+
+Function:
+1. Clears and creates data and output directories
+2. Copies input VCF files to the data directory
+3. Compresses and indexes VCF files
+4. Performs a "ring intersect" to find common markers across all files
+5. Performs a "star intersect" to extract exclusive lines from each file
+6. Decompresses and renames the resulting files
+7. Copies final results to the output directory
+
+Output:
+- Processed VCF files in the output directory, named with a combination of input file names and the operation type (IntMarkExcLine)
+- Files contain common markers across all input files and exclusive lines from each input file
+
 * ringStarMerge
+
+Purpose: This script performs a common marker intersection across multiple VCF
+files, identifying shared genetic variants.
+
+- Ring intersection:
+  - Performs a sequential intersection of VCF files to find common markers
+  - Uses bcftools isec to intersect each file with the result of the previous intersection
+- Star intersection:
+  - Takes the result from the ring intersection and intersects it with each original input file
+  - Creates separate files for common markers between the ring intersection result and each input file
+- Merge intersection:
+  - Combines all the common marker files from the star intersection
+  - Uses bcftools merge with --force-samples and --merge none options
+  - Creates a single VCF file containing all common markers across all input files
+  - The output filename includes the names of all input files
+
+The merge consolidates the results of the previous
+intersections into a single VCF file, representing the common markers across all
+input files.
+
+Requirements:
+- directory 'input' with uncompressed VCF files
+- Environment with parallel, rtgtools, and bcftools installed
+
+Usage:
+Usage: Place VCF files in the "input" directory and run the script. It will
+process all VCF files found.
+
+Function:
+1. Clears and creates data and output directories
+2. Copies input VCF files to the data directory
+3. Compresses and indexes VCF files
+4. Performs a "ring intersect" to find common variants across all files
+5. Conducts a "star intersect" to compare the result with each original file
+6. Merges the results into a single VCF file
+
+Output:
+- A merged VCF file in the output directory, containing common markers across all input files
+
 * starCombine
 * starIntersect
+
+
+Provide a brief documentation for this program
+Purpose:
+Requirements:
+Usage:
+Function:
+Output:

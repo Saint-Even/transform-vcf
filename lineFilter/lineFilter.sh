@@ -1,18 +1,7 @@
 #!/bin/bash
-##           (\.---./)
-##            /.-.-.\
-##           /| 0_0 |\
-##          |_`-(v)-'_|
-##          \`-._._.-'/      .-.
-##    -~-(((.`-\_|_/-'.)))-~' <_
-##           `.     .'
-##             `._.'
-##
-##    -----~--~---~~~----~-`.-;~
-##            GEBVeR
 
 #requires an input dir with uncompressed vcf files
-# designed to take the *.vcf files from starIntersect or starCombine
+
 # filter for repeat lines
 # drop all empty lines
 # drop all customDrop lines
